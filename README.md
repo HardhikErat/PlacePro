@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # PlacePro — Internship & Placement Portal
 
 > K.J. Somaiya School of Engineering · Roll No: 16010124083 · DBMS Lab · Semester IV
@@ -121,3 +122,6 @@ npm run db:studio
 ---
 
 *Built for DBMS Lab — Department of Electronics and Computer Engineering, K.J. Somaiya School of Engineering, Mumbai-77*
+=======
+# PlacePro
+>>>>>>> fd53ff4e3b98e694080f06de1d1784899b09beea

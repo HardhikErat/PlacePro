@@ -1,0 +1,134 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 222 47% 5%;
+    --foreground: 210 40% 96%;
+    --card: 222 47% 7%;
+    --card-foreground: 210 40% 96%;
+    --primary: 210 100% 56%;
+    --primary-foreground: 222 47% 5%;
+    --secondary: 217 32% 12%;
+    --secondary-foreground: 210 40% 96%;
+    --muted: 217 32% 12%;
+    --muted-foreground: 215 20% 55%;
+    --accent: 263 70% 60%;
+    --accent-foreground: 210 40% 96%;
+    --destructive: 0 72% 51%;
+    --border: 217 32% 14%;
+    --input: 217 32% 12%;
+    --ring: 210 100% 56%;
+    --radius: 0.75rem;
+    --font-display: 'Syne';
+    --font-body: 'DM Sans';
+    --font-mono: 'JetBrains Mono';
+  }
+}
+
+@layer base {
+  * { @apply border-border; }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-body), system-ui, sans-serif;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display), system-ui, sans-serif;
+  }
+
+  /* Fix select dropdown styling — dark background everywhere */
+  select {
+    background-color: hsl(217 32% 10%) !important;
+    color: hsl(210 40% 96%) !important;
+    border-color: hsl(217 32% 20%) !important;
+  }
+  select option {
+    background-color: hsl(222 47% 8%) !important;
+    color: hsl(210 40% 96%) !important;
+    padding: 8px 12px;
+  }
+  select option:hover,
+  select option:checked {
+    background-color: hsl(210 100% 30%) !important;
+    color: white !important;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply bg-white/[0.03] backdrop-blur-xl border border-white/[0.08];
+  }
+  .glass-hover {
+    @apply glass transition-all duration-300 hover:bg-white/[0.06] hover:border-white/[0.12] hover:shadow-lg hover:shadow-black/20;
+  }
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-300 to-violet-400;
+  }
+  .sidebar-item {
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground
+           transition-all duration-200 cursor-pointer
+           hover:bg-white/[0.06] hover:text-foreground;
+  }
+  .sidebar-item.active {
+    @apply bg-primary/10 text-primary border border-primary/20;
+  }
+  .input-field {
+    @apply w-full bg-white/[0.04] border border-white/[0.1] rounded-lg px-4 py-2.5
+           text-sm text-foreground placeholder:text-muted-foreground
+           focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40
+           transition-all duration-200;
+    background-color: hsl(217 32% 10%) !important;
+    color: hsl(210 40% 96%) !important;
+  }
+  .btn-primary {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold
+           bg-primary text-primary-foreground
+           hover:bg-primary/90 active:scale-[0.98]
+           transition-all duration-200 cursor-pointer;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold
+           bg-white/[0.06] text-foreground border border-white/[0.1]
+           hover:bg-white/[0.1] active:scale-[0.98]
+           transition-all duration-200 cursor-pointer;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 px-3 py-2 rounded-lg text-sm
+           text-muted-foreground hover:text-foreground hover:bg-white/[0.06]
+           transition-all duration-200 cursor-pointer;
+  }
+  .badge-pending    { @apply bg-amber-500/10 text-amber-400 border border-amber-500/20; }
+  .badge-shortlisted { @apply bg-blue-500/10 text-blue-400 border border-blue-500/20; }
+  .badge-selected   { @apply bg-emerald-500/10 text-emerald-400 border border-emerald-500/20; }
+  .badge-rejected   { @apply bg-red-500/10 text-red-400 border border-red-500/20; }
+  .badge-placed     { @apply bg-violet-500/10 text-violet-400 border border-violet-500/20; }
+  .skeleton {
+    @apply rounded-md bg-gradient-to-r from-white/[0.04] via-white/[0.08] to-white/[0.04] bg-[length:200%_100%] animate-shimmer;
+  }
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { @apply bg-white/10 rounded-full; }
+::-webkit-scrollbar-thumb:hover { @apply bg-white/20; }
+
+.noise-bg::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.3;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+}
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.1;
+  pointer-events: none;
+  animation: pulse 8s ease-in-out infinite;
+}

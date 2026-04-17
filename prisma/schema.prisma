@@ -1,0 +1,115 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Department {
+  dept_id   Int       @id
+  dept_name String    @db.VarChar(100)
+  students  Student[]
+  @@map("department")
+}
+
+model Student {
+  student_id        Int               @id
+  name              String            @db.VarChar(100)
+  cgpa              Float?
+  dept_id           Int?
+  password          String            @default("student123") @db.VarChar(255)
+  department        Department?       @relation(fields: [dept_id], references: [dept_id], onDelete: SetNull, onUpdate: Cascade)
+  applications      Application[]
+  placement_results PlacementResult[]
+  @@map("student")
+}
+
+model Company {
+  company_id   Int           @id
+  company_name String        @db.VarChar(150)
+  location     String?       @db.VarChar(150)
+  internships  Internship[]
+  placements   Placement[]
+  applications Application[]
+  recruiters   Recruiter[]
+  @@map("company")
+}
+
+model Recruiter {
+  recruiter_id   Int         @id
+  recruiter_name String      @db.VarChar(100)
+  company_id     Int?
+  password       String      @default("recruiter123") @db.VarChar(255)
+  company        Company?    @relation(fields: [company_id], references: [company_id], onDelete: Cascade, onUpdate: Cascade)
+  interviews     Interview[]
+  @@map("recruiter")
+}
+
+model Internship {
+  internship_id   Int      @id
+  company_id      Int?
+  duration_months Int?
+  stipend         Int?
+  company         Company? @relation(fields: [company_id], references: [company_id], onDelete: Cascade, onUpdate: Cascade)
+  @@map("internship")
+}
+
+model Application {
+  application_id Int         @id
+  student_id     Int?
+  company_id     Int?
+  student        Student?    @relation(fields: [student_id], references: [student_id], onDelete: Cascade, onUpdate: Cascade)
+  company        Company?    @relation(fields: [company_id], references: [company_id], onDelete: Cascade, onUpdate: Cascade)
+  interviews     Interview[]
+  @@map("application")
+}
+
+model Interview {
+  interview_id   Int          @id
+  application_id Int?
+  recruiter_id   Int?
+  round_no       Int?
+  result         String?      @db.VarChar(50)
+  application    Application? @relation(fields: [application_id], references: [application_id], onDelete: Cascade, onUpdate: Cascade)
+  recruiter      Recruiter?   @relation(fields: [recruiter_id], references: [recruiter_id], onDelete: Cascade, onUpdate: Cascade)
+  @@map("interview")
+}
+
+model Placement {
+  placement_id      Int               @id
+  company_id        Int?
+  role              String?           @db.VarChar(100)
+  ctc               Int?
+  company           Company?          @relation(fields: [company_id], references: [company_id], onDelete: Cascade, onUpdate: Cascade)
+  placement_skills  PlacementSkill[]
+  placement_results PlacementResult[]
+  @@map("placement")
+}
+
+model PlacementResult {
+  result_id    Int        @id
+  student_id   Int?
+  placement_id Int?
+  status       String?    @db.VarChar(50)
+  student      Student?   @relation(fields: [student_id], references: [student_id], onDelete: Cascade, onUpdate: Cascade)
+  placement    Placement? @relation(fields: [placement_id], references: [placement_id], onDelete: Cascade, onUpdate: Cascade)
+  @@map("placement_result")
+}
+
+model Skill {
+  skill_id         Int              @id
+  skill_name       String           @db.VarChar(100)
+  placement_skills PlacementSkill[]
+  @@map("skill")
+}
+
+model PlacementSkill {
+  placement_id Int
+  skill_id     Int
+  placement    Placement @relation(fields: [placement_id], references: [placement_id], onDelete: Cascade, onUpdate: Cascade)
+  skill        Skill     @relation(fields: [skill_id], references: [skill_id], onDelete: Cascade, onUpdate: Cascade)
+  @@id([placement_id, skill_id])
+  @@map("placement_skill")
+}
